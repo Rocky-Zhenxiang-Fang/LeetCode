@@ -1,13 +1,8 @@
 from typing import List
-import collections
-
-
+from collections import defaultdict, deque
 class Solution:
     def solveSudoku(self, board: List[List[str]]) -> None:
-        rowSets = [set() for _ in range(9)]  # each set represents element of a row
-        colSets = [set() for _ in range(9)]
-        subBoardSets = [[set() for _ in range(3)] for _ in range(3)]
-        emptyBox = collections.deque()  # stores (row, col, 1) that dont have number in the beginning
+        rows, cols, sqas, pits = defaultdict(set), defaultdict(set), defaultdict(set), deque([])
 
         def init() -> None:
             """
@@ -20,31 +15,31 @@ class Solution:
                 for col in range(len(board[0])):
                     a = board[row][col]
                     if a == '.':
-                        emptyBox.appendleft((row, col))
+                        pits.appendleft((row, col))
                     else:
-                        rowSets[row].add(int(a))
-                        colSets[col].add(int(a))
-                        subBoardSets[row // 3][col // 3].add(int(a))
+                        rows[row].add(int(a))
+                        cols[col].add(int(a))
+                        sqas[(row // 3, col // 3)].add(int(a))
 
         def add(row, col, val):
-            emptyBox.popleft()
-            rowSets[row].add(val)
-            colSets[col].add(val)
-            subBoardSets[row // 3][col // 3].add(val)
+            rows[row].add(val)
+            cols[col].add(val)
+            sqas[(row // 3, col // 3)].add(val)
             board[row][col] = str(val)
+            pits.popleft()
 
         def remove(row, col, val):
             board[row][col] = '.'
-            rowSets[row].remove(val)
-            colSets[col].remove(val)
-            subBoardSets[row // 3][col // 3].remove(val)
-            emptyBox.appendleft((row, col))
+            rows[row].discard(val)
+            cols[col].discard(val)
+            sqas[(row // 3, col // 3)].discard(val)
+            pits.appendleft((row, col))
 
         def dfs() -> bool:
-            if not emptyBox: return True
-            r, c = emptyBox.popleft()
-            for v in range(10):
-                if v not in rowSets[r] and v not in colSets[c] and v not in subBoardSets[r // 3][c // 3]:
+            if not pits: return True
+            r, c = pits[0]
+            for v in range(1, 10):
+                if v not in rows[r] and v not in cols[c] and v not in sqas[(r // 3, c // 3)]:
                     add(r, c, v)
                     if dfs():
                         return True
