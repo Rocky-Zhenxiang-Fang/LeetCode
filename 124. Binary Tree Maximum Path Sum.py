@@ -40,9 +40,7 @@ class Solution:
 
     def maxPathSum(self, root: TreeNode) -> int:
         self.maxVal = root.val
-
         self.dfs(root)
-
         return self.maxVal
 
     def array2Tree(self, arr: [int]) -> TreeNode:
