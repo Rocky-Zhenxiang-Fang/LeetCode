@@ -1,11 +1,12 @@
 class Solution:
     def titleToNumber(self, s: str) -> int:
         mapping = {}
-        
         for i in range(65, 91):
             mapping[chr(i)] = i - 64
-        
-        print(mapping)
+        res = 0
+        for ch in s:
+            res = res * 26 + mapping[ch]
+        return res
 
 
 if __name__ == "__main__":
