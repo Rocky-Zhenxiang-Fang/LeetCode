@@ -1,5 +1,6 @@
 from typing import List
 
+
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         dp = [[float("inf") for _ in range(amount + 1)] for _ in range(len(coins) + 1)]
@@ -14,6 +15,7 @@ class Solution:
                     dp[row][col] = dp[row - 1][col]
 
         return dp[-1][-1] if dp[-1][-1] != float("inf") else -1
+
 
 if __name__ == "__main__":
     sol = Solution()
