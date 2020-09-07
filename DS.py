@@ -17,7 +17,7 @@ class TreeNode(object):
 def arr2TreeNode(arr) -> TreeNode:
     nodeArr = [TreeNode]
     for n in arr:
-        if n:
+        if n is not None:
             nodeArr.append(TreeNode(n))
         else:
             nodeArr.append(None)
