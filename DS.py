@@ -14,6 +14,28 @@ class TreeNode(object):
         self.right = right
 
 
+class ListNode(object):
+    def __init__(self, val=0, next_node=None):
+        self.val = val
+        self.next = next_node
+
+
+def arr2LinkedNode(arr) -> ListNode:
+    prev = None
+    for i in range(len(arr) - 1, -1, -1):
+        current_node = ListNode(arr[i])
+        current_node.next = prev
+        prev = current_node
+    return prev
+
+
+def print_ListNode(head: ListNode):
+    res = []
+    while head:
+        res.append(head.val)
+        head = head.next
+    print(res)
+
 def arr2TreeNode(arr) -> TreeNode:
     nodeArr = [TreeNode]
     for n in arr:
