@@ -2,7 +2,7 @@ import collections
 
 
 class Solution:
-    def reverse(self, x: int) -> int:
+    def reverse_list(self, x: int) -> int:
         xStr = str(x)
         res = collections.deque()
         negetive = False
@@ -18,3 +18,10 @@ class Solution:
             res.appendleft("-")
         ans = int("".join(list(res)))
         return ans if -2 ** 31 <= ans <= 2 ** 31 - 1 else 0
+
+if __name__ == '__main__':
+    sol = Solution()
+    text = 123
+    "{0:b}".format(text)
+    print(sol.reverse(text))
+
