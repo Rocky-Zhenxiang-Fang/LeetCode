@@ -39,10 +39,4 @@ class Solution:
         return copied[ans]
 
 
-if __name__ == '__main__':
-
-
-
-
-
 
