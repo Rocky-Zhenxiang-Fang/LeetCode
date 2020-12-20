@@ -36,6 +36,7 @@ def print_ListNode(head: ListNode):
         head = head.next
     print(res)
 
+
 def arr2TreeNode(arr) -> TreeNode:
     nodeArr = [TreeNode]
     for n in arr:
