@@ -1,26 +1,19 @@
-from collections import deque
+# This file is used to review done questions
 
-from LeetCode.DS import TreeNode
+
+
+# Definition for a binary tree node.
+import DS
+
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 
 class Solution:
-    def maxDepth_old(self, root: TreeNode) -> int:
-        if not root: return 0
-        depth = 0
-
-        que = deque([root])
-        while que:
-            n = len(que)
-            for i in range(len(que)):
-                node = que.popleft()
-                if node.left:
-                    que.append(node.left)
-                if node.right:
-                    que.append(node.right)
-            depth += 1
-
-        return depth
-
     def maxDepth(self, root: TreeNode) -> int:
         """
         Idea: BFS, as long as it ends, return the level
@@ -38,3 +31,9 @@ class Solution:
             if node.right:
                 que.appendleft((node.right, level + 1))
         return level
+
+
+if __name__ == '__main__':
+    test_head = DS.arr2TreeNode([3, 9, 20, None, None, 15, 7])
+    sol = Solution()
+    print(sol.maxDepth(test_head))
