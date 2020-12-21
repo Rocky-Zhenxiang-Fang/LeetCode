@@ -35,13 +35,13 @@ class Solution(object):
                                 queue.append((neigh, steps + 1))
             return 0
 
-        d = construct_dict(set(wordList) | {beginWord, endWord})
+        d = construct_dict(set(wordList) | {beginWord})
         return bfs_words(beginWord, endWord, d)
 
 
 if __name__ == "__main__":
     beginWord = "hit"
     endWord = "cog"
-    wordList = ["hot", "dot", "dog", "lot", "log", "cog"]
+    wordList = ["hot", "dot", "dog", "lot", "log"]
     sol = Solution()
     print(sol.ladderLength(beginWord, endWord, wordList))
