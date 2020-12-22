@@ -16,15 +16,14 @@ class Solution:
         return maxPro
 
     def maxProfit(self, prices: List[int]) -> int:
-        if len(prices) == 0:
+        lowest_price = float("inf")
+        max_profit = 0
+        if not prices:
             return 0
-        buyPrice = prices[0]
-        maxPro = 0
-        for i in range(len(prices) - 1):
-            buyPrice = min(buyPrice, prices[i])
-            maxPro = max(maxPro, prices[i + 1] - buyPrice)
-        return maxPro
-
+        for p in prices:
+            max_profit = max(max_profit, p - lowest_price)
+            lowest_price = min(lowest_price, p)
+        return max_profit
 
 if __name__ == '__main__':
     sol = Solution()
