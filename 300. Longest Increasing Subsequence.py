@@ -1,25 +1,19 @@
 from typing import List
 
+
 class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
+    def maxSubArray(self, nums: List[int]) -> int:
         """
-        From https://www.youtube.com/watch?v=fV-TF4OvZpk
-        for each number in nums, we see how can it extend previous subsequences, and store the
-        maximum of them into the box
+        Idea: in each iteration, decide if it wants to connect to previous components
         """
-        dp = [1 for _ in range(len(nums))]
-        for i in range(len(dp)):
-            tmp = 1
-            for j in range(i):
-                if nums[i] > nums[j]:
-                    tmp = max(dp[j] + 1, tmp)
-            dp[i] = tmp
+        dp = [0 for _ in range(len(nums))]  # dp stores the maximum sum of the subarray that contains itself
+        dp[0] = nums[0]
+        for i in range(1, len(nums)):
+            dp[i] = max(dp[i - 1] + nums[i], nums[i])  # if connect to previous components can increase sum, do it
         return max(dp)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    arr = [-1, 3, 4, 5, 2, 2, 2, 2]
-    print(sol.lengthOfLIS(arr))
-
-
+    arr = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+    print(sol.maxSubArray(arr))
