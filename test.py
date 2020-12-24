@@ -1,27 +1,28 @@
 # This file is used to review done questions
 
 # Definition for a binary tree node.
-from typing import List
+from typing import List, Set
 
 import DS
 
 
 class Solution:
-    def permute(self, nums: List[int]) -> List[List[int]]:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
         """
-        Idea: solve it recursively, as long as there are unused elements, put it at the next of the solution
-        then pass the remaining elements to the next iteration, when all elements are used, one solution is found
+        Idea: in each recursive call
+            the last item from nums is popped out
+            even though one item can be added or not, only the condition that adds the element is importand
         """
         res = []
+        visited = set()
 
-        def recur(sub, remain) -> None:
-            if not remain:  # nothing to add, one solution is found
-                res.append(sub[:])  # deep copy
-            else:
-                for i in range(len(remain)):  # for each element in remain
-                    sub.append(remain[i])  # add this item to the next element of answer
-                    recur(sub, remain[:i] + remain[i + 1:])
-                    sub.pop()  # remove the last item before adding another candidate
+        def recur(sub: List[int], remaining: List[int]) -> None:
+            if set(sub) not in visited and len(remaining) >= 0:
+                visited.add(frozenset(sub))  # record visited set
+                res.append(sub)
+                for i in range(len(remaining)):
+                    recur(sub + [remaining[i]], remaining[:i] + remaining[i + 1:])
+
         recur([], nums)
         return res
 
@@ -29,4 +30,4 @@ class Solution:
 if __name__ == '__main__':
     nums = [1, 2, 3]
     sol = Solution()
-    print(sol.permute(nums))
+    print(sol.subsets(nums))

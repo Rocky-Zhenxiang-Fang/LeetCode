@@ -1,21 +1,25 @@
 from typing import List
 
-
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
+        """
+        Idea: in each recursive call
+            the last item from nums is popped out
+            even though one item can be added or not, only the condition that adds the element is importand
+        """
         res = []
-        checked = set()
-        self.dfs(res, nums, checked, [])
+        visited = set()
+
+        def recur(sub: List[int], remaining: List[int]) -> None:
+            if set(sub) not in visited and len(remaining) >= 0:
+                visited.add(frozenset(sub))  # record visited set
+                res.append(sub)
+                for i in range(len(remaining)):
+                    recur(sub + [remaining[i]], remaining[:i] + remaining[i + 1:])
+
+        recur([], nums)
         return res
 
-    def dfs(self, res, nums, checked, current):
-        if set(current) in checked or len(nums) == 0:
-            return
-        else:
-            res.append(current)
-            checked.add(frozenset(current))
-            for i in range(len(nums)):
-                self.dfs(res, nums[:i] + nums[i + 1:], checked, current + [nums[i]])
 
 
 if __name__ == '__main__':
