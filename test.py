@@ -7,18 +7,26 @@ import DS
 
 
 class Solution:
-    def coinChange(self, coins: List[int], amount: int) -> int:
-        dp = [float("inf") for _ in range(amount + 1)]
-        dp[0] = 0
-        for i in range(1, len(dp)):
-            for c in coins:
-                if i >= c:
-                    dp[i] = min(dp[i], dp[i - c] + 1)
-        return -1 if dp[-1] == float("inf") else dp[-1]
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        """
+        Idea: solve it recursively, as long as there are unused elements, put it at the next of the solution
+        then pass the remaining elements to the next iteration, when all elements are used, one solution is found
+        """
+        res = []
+
+        def recur(sub, remain) -> None:
+            if not remain:  # nothing to add, one solution is found
+                res.append(sub[:])  # deep copy
+            else:
+                for i in range(len(remain)):  # for each element in remain
+                    sub.append(remain[i])  # add this item to the next element of answer
+                    recur(sub, remain[:i] + remain[i + 1:])
+                    sub.pop()  # remove the last item before adding another candidate
+        recur([], nums)
+        return res
 
 
 if __name__ == '__main__':
-    nums = [1, 2, 5]
-    target = 11
+    nums = [1, 2, 3]
     sol = Solution()
-    print(sol.coinChange(nums, target))
+    print(sol.permute(nums))
