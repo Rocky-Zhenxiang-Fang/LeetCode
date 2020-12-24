@@ -1,5 +1,6 @@
 from typing import List
 
+
 class Solution:
     def subsets(self, nums: List[int]) -> List[List[int]]:
         """
@@ -21,8 +22,6 @@ class Solution:
         return res
 
 
-
 if __name__ == '__main__':
     sol = Solution()
     print(sol.subsets([1, 2, 3]))
-
