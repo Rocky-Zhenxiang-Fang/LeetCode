@@ -7,27 +7,42 @@ import DS
 
 
 class Solution:
-    def subsets(self, nums: List[int]) -> List[List[int]]:
-        """
-        Idea: in each recursive call
-            the last item from nums is popped out
-            even though one item can be added or not, only the condition that adds the element is importand
-        """
+    def fractionToDecimal(self, numerator: int, denominator: int) -> str:
         res = []
-        visited = set()
+        decimal = set()
 
-        def recur(sub: List[int], remaining: List[int]) -> None:
-            if set(sub) not in visited and len(remaining) >= 0:
-                visited.add(frozenset(sub))  # record visited set
-                res.append(sub)
-                for i in range(len(remaining)):
-                    recur(sub + [remaining[i]], remaining[:i] + remaining[i + 1:])
+        def util(reminder: int) -> None:
+            if reminder == 0:
+                return
+            else:
+                if reminder >= denominator:
+                    next_remin = reminder % denominator
+                    if decimal:
+                        if reminder // denominator in decimal:
+                            res.insert(res.index(reminder // denominator), "(")
+                            res.append(")")
+                            return
+                        else:
+                            decimal.add(reminder // denominator)
+                    res.append(str(reminder // denominator))
+                else:
+                    next_remin = reminder
+                    if not decimal:
+                        decimal.add(-1)
+                        res.append("0.")
+                    else:
+                        res.append("0")
+                        decimal.add(0)
+                if decimal:
+                    next_remin = next_remin * 10
+            util(next_remin)
 
-        recur([], nums)
-        return res
+        util(numerator)
+        return "".join(res)
 
 
 if __name__ == '__main__':
-    nums = [1, 2, 3]
+    nums = 4
+    den = 333
     sol = Solution()
-    print(sol.subsets(nums))
+    print(sol.fractionToDecimal(nums, den))
