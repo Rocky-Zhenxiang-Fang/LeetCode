@@ -3,27 +3,25 @@ from typing import List
 
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        from collections import deque
-        sortedInt = sorted(intervals, key=lambda x: x[0])
-        sortedInt = deque(sortedInt)
+        """
+        Idea: if two interval can be merged, the bigger start must be in between the smaller start and smaller end
+            Thus, we can first sort intervals by the start point, and check if intervals can be merged
+            If cannot be merged, add the interval into the res
+        """
         res = []
-        while len(sortedInt) >= 2:
-            first = sortedInt.popleft()
-            second = sortedInt.popleft()
-            if first[0] <= second[0] <= first[1]:
-                merged = [0, 0]
-                merged[0] = min(first[0], second[0])
-                merged[1] = max(first[1], second[1])
-                sortedInt.appendleft(merged)
+        intervals.sort(key=lambda x: x[0])
+        start, end = intervals[0][0], intervals[0][1]
+        for i in intervals:
+            if start <= i[0] <= end:
+                end = max(end, i[1])
             else:
-                res.append(first)
-                sortedInt.appendleft(second)
-        if sortedInt:
-            res.append(sortedInt[0])
+                res.append([start, end])
+                start, end = i[0], i[1]
+        res.append([start, end])
         return res
 
 
 if __name__ == '__main__':
-    arr = [[2,3],[2,2],[3,3],[1,3],[5,7],[2,2],[4,6]]
+    arr = [[2, 3], [2, 2], [3, 3], [1, 3], [5, 7], [2, 2], [4, 6]]
     sol = Solution()
     print(sol.merge(arr))
