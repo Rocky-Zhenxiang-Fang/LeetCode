@@ -2,31 +2,35 @@
 
 # Definition for a binary tree node.
 from typing import List, Set
-
+from DS import TreeNode
 import DS
 
 
 class Solution:
-    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
         """
-        Idea: if two interval can be merged, the bigger start must be in between the smaller start and smaller end
-            Thus, we can first sort intervals by the start point, and check if intervals can be merged
-            If cannot be merged, add the interval into the res
+        Insight:
+            preorder always store the root in front of all its subtrees
+            inorder always separate its left subtree and right subtree by its root
         """
-        res = []
-        intervals.sort(key=lambda x: x[0])
-        start, end = intervals[0][0], intervals[0][1]
-        for i in intervals:
-            if start <= i[0] <= end:
-                end = max(end, i[1])
-            else:
-                res.append([start, end])
-                start, end = i[0], i[1]
-        res.append([start, end])
-        return res
+        self.next_root = 0
+        return self._buildTree_helper(preorder, inorder, 0, len(inorder) - 1)
+
+    def _buildTree_helper(self, preorder: List[int], inorder: List[int], in_start, in_end) -> TreeNode:
+        if in_end < in_start or self.next_root >= len(preorder):
+            return None
+        root = TreeNode(preorder[self.next_root])
+        self.next_root += 1
+        mid = inorder.index(root.val)
+        root.left = self._buildTree_helper(preorder, inorder, in_start, mid - 1)
+        root.right = self._buildTree_helper(preorder, inorder, mid + 1, in_end)
+        return root
 
 
 if __name__ == '__main__':
-    intervals = [[2,6], [1,3],[8,10],[15,18]]
+    preorder = [3, 9, 20, 15, 7]
+    inorder = [9, 3, 15, 20, 7]
     sol = Solution()
-    print(sol.merge(intervals))
+    ans = sol.buildTree(preorder, inorder)
+    print(sol.buildTree(preorder, inorder))
+    print(" ")
