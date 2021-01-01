@@ -7,27 +7,23 @@ import DS
 
 
 class Solution:
-    def subsets(self, nums: List[int]) -> List[List[int]]:
-        """
-        Idea: in each recursive call
-            the last item from nums is popped out
-            even though one item can be added or not, only the condition that adds the element is importand
-        """
-        res = []
-        visited = set()
-
-        def recur(sub: List[int], remaining: List[int]) -> None:
-            if set(sub) not in visited and len(remaining) >= 0:
-                visited.add(frozenset(sub))  # record visited set
-                res.append(sub)
-                for i in range(len(remaining)):
-                    recur(sub + [remaining[i]], remaining[:i] + remaining[i + 1:])
-
-        recur([], nums)
-        return res
+    def numUniqueEmails(self, emails: List[str]) -> int:
+        result = set()
+        for e in emails:
+            local, domain = e.split("@")
+            new_local = []
+            for l in local:
+                if l == ".":
+                    continue
+                elif l == "+":
+                    break
+                else:
+                    new_local.append(l)
+            result.add("".join(new_local) + "@" + domain)
+        return len(result)
 
 
 if __name__ == '__main__':
-    nums = [1, 2, 3]
+    test = ["test.email+alex@leetcode.com","test.e.mail+bob.cathy@leetcode.com","testemail+david@lee.tcode.com"]
     sol = Solution()
-    print(sol.subsets(nums))
+    print(sol.numUniqueEmails(test))
