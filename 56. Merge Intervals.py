@@ -22,6 +22,6 @@ class Solution:
 
 
 if __name__ == '__main__':
-    arr = [[2, 3], [2, 2], [3, 3], [1, 3], [5, 7], [2, 2], [4, 6]]
+    arr = [[2,3],[2,2],[3,3],[1,3],[5,7],[2,2],[4,6]]
     sol = Solution()
     print(sol.merge(arr))
