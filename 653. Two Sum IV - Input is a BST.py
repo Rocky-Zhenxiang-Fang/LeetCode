@@ -1,25 +1,28 @@
 from DS import TreeNode
+import DS
 
 
 class Solution:
     def findTarget(self, root: TreeNode, k: int) -> bool:
         """
-        Inorder, take out all element, then do a Two sum
+        Idea: do any kind of traversal and store the used number in hashmap
         """
-        elements = []
-        value_map = set()
+        values = set()
 
-        def inorder(node):
-            if node.left:
-                inorder(node.left)
-            elements.append(node.val)
-            if node.right:
-                inorder(node.right)
-
-        inorder(root)
-        for e in elements:
-            if k - e in value_map:
+        def preorder(node: TreeNode) -> bool:
+            if not node:
+                return False
+            if k - node.val in values:
                 return True
             else:
-                value_map.add(e)
-        return False
+                values.add(node.val)
+                return preorder(node.left) or preorder(node.right)
+
+        return preorder(root)
+
+
+if __name__ == '__main__':
+    sol = Solution()
+    r = DS.arr2TreeNode([2, 1, 3])
+    k = 3
+    print(sol.findTarget(r, k))

@@ -12,23 +12,22 @@ class TreeNode:
 class Solution:
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
         """
-        Idea, preorder: gives the root of left-subtree
-              inorder : separates the left sub tree and the right subtree of a given root
+        Insight:
+            preorder always store the root in front of all its subtrees
+            inorder always separate its left subtree and right subtree by its root
         """
-        self.root_index = 0
-        if not preorder or not inorder or len(preorder) != len(inorder):
-            return None
+        self.next_root = 0
+        return self._buildTree_helper(preorder, inorder, 0, len(inorder) - 1)
 
-        def recur(low, high) -> TreeNode:
-            if low > high:
-                return None
-            root = TreeNode(preorder[self.root_index])
-            self.root_index += 1
-            mid = inorder.index(root.val)
-            root.left = recur(low, mid - 1)
-            root.right = recur(mid + 1, high)
-            return root
-        return recur(0, len(preorder) - 1)
+    def _buildTree_helper(self, preorder: List[int], inorder: List[int], in_start, in_end) -> TreeNode:
+        if in_end < in_start or self.next_root >= len(preorder):
+            return None
+        root = TreeNode(preorder[self.next_root])
+        self.next_root += 1
+        mid = inorder.index(root.val)
+        root.left = self._buildTree_helper(preorder, inorder, in_start, mid - 1)
+        root.right = self._buildTree_helper(preorder, inorder, mid + 1, in_end)
+        return root
 
 
 if __name__ == '__main__':
