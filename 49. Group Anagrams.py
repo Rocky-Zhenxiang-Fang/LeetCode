@@ -9,7 +9,8 @@ class Solution:
             sorted_map[key] = sorted_map.get(key, []) + [s]
         return list(sorted_map.values())
 
+
 if __name__ == '__main__':
     sol = Solution()
-    arr =  ["eat","tea","tan","ate","nat","bat"]
+    arr = ["eat", "tea", "tan", "ate", "nat", "bat"]
     print(sol.groupAnagrams(arr))
