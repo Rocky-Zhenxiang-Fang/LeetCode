@@ -1,32 +1,32 @@
+from typing import List
+
+
 class Solution:
-    def searchMatrixMine(self, matrix, target):  # Takes too much memory
-        check = set()
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        """
+        Idea: pick rows that might contain the target, then do binary search
+        """
 
-        def dfs(r, c) -> bool:
-            if (r, c) in check or r == -1 or r == len(matrix) or c == -1 or c == len(matrix[0]):
-                return False
-            else:
-                check.add((r, c))
-            if matrix[r][c] == target:
-                return True
-            elif matrix[r][c] < target:
-                return dfs(r + 1, c) or dfs(r, c + 1)
-            else:
-                return dfs(r - 1, c) or dfs(r, c - 1)
-
-        row = len(matrix) // 2
-        col = len(matrix[0]) // 2
-        return dfs(row, col)
-
-    def searchMatrix(self, matrix, target):
+        if not len(matrix) or not len(matrix[0]):
+            # Quick response for empty matrix
+            return False
+        h, w = len(matrix), len(matrix[0])
         for row in matrix:
-            col = len(matrix[0]) - 1
-            while col != 0 and row[col] > target:
-                col -= 1
-            else:
-                if row[col] == target:
-                    return True
+            # range check
+            if row[0] <= target <= row[-1]:
+                # launch binary search on current possible row
+                left, right = 0, w - 1
+                while left <= right:
+                    mid = left + (right - left) // 2
+                    mid_value = row[mid]
+                    if target > mid_value:
+                        left = mid + 1
+                    elif target < mid_value:
+                        right = mid - 1
+                    else:
+                        return True
         return False
+
 
 if __name__ == '__main__':
     mat = [
@@ -37,5 +37,7 @@ if __name__ == '__main__':
         [18, 21, 23, 26, 30]
     ]
     tar = 5
+    mat_2 = [[-1, 3]]
+    tar_2 = 3
     sol = Solution()
-    print(sol.searchMatrix(mat, tar))
+    print(sol.searchMatrix(mat_2, tar_2))
