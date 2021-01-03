@@ -1,6 +1,7 @@
 from typing import List
 import DS
 
+
 class TreeNode:
     def __init__(self, val=0, left=None, right=None):
         self.val = val
@@ -8,41 +9,37 @@ class TreeNode:
         self.right = right
 
 
-
 class Solution(object):
     def zigzagLevelOrder(self, root):
         """
-        :type root: TreeNode
-        :rtype: List[List[int]]
+        Idea:
+            Do a normal level order traversal, however, before adding it to the res, reverse it if necessary
         """
-        if not root:
-            return []
         from collections import deque
-        left = True
-        res = []
-        de = deque()
-        de.append(root)
-        while de:
-            n = len(de)
-            sub = deque()
-            while n > 0:
-                node = de.popleft()
-                if node.left:
-                    de.append(node.left)
-                if node.right:
-                    de.append(node.right)
-                if left:
-                    sub.append(node.val)
-                else:
-                    sub.appendleft(node.val)
-                n -= 1
-            left = not left
-            res.append(list(sub))
 
+        res = []
+        que = deque([root])
+        left = True
+        if root:
+            while que:
+                n = len(que)
+                sub = []
+                for _ in range(n):
+                    node = que.pop()
+                    sub.append(node.val)
+                    if node.left:
+                        que.appendleft(node.left)
+                    if node.right:
+                        que.appendleft(node.right)
+                if left:
+                    res.append(sub)
+                else:
+                    res.append(sub[::-1])
+                left = not left
         return res
 
 
 if __name__ == '__main__':
-    root = DS.arr2TreeNode([3,9,20,None,None,15,7])
+    root = DS.arr2TreeNode([3, 9, 20, None, None, 15, 7])
     sol = Solution()
     print(sol.zigzagLevelOrder(root))
