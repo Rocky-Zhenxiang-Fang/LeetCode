@@ -7,27 +7,26 @@ class Solution:
         """
         idea: do a pre-order traversal, as long as s has value == t, traversal both s and t
         when t is at the end, see if s is also at the end
+        if this point is not the root, there might be another root having the same val that is the root, so keep searching
         """
+        ans = False
         if not s or not t:
             return False
-
-        def isSameTree(s_subtree: TreeNode, t_subtree: TreeNode) -> bool:
-            if not s_subtree and not t_subtree:
-                return True
-            elif not s_subtree or not t_subtree:
-                return False
-            elif s_subtree.val != t_subtree.val:
-                return False
-            return isSameTree(s_subtree.left, t_subtree.left) and isSameTree(s_subtree.right, t_subtree.right)
-
         if s.val == t.val:
-            if isSameTree(s, t):
-                return True
-        return self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
+            ans = self.is_same_tree(s, t)
+        return ans if ans else self.isSubtree(s.left, t) or self.isSubtree(s.right, t)
+
+    def is_same_tree(self, s: TreeNode, t: TreeNode) -> bool:
+        if not s and not t:
+            return True
+        if not s or not t or s.val != t.val:
+            return False
+        else:
+            return self.is_same_tree(s.left, t.left) and self.is_same_tree(s.right, t.right)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    test1_1 = DS.arr2TreeNode([1, 1])
-    test1_2 = DS.arr2TreeNode([1])
+    test1_1 = DS.arr2TreeNode([3, 4, 5, 1, None, 2])
+    test1_2 = DS.arr2TreeNode([3, 1, 2])
     print(sol.isSubtree(test1_1, test1_2))
