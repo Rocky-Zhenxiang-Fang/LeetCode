@@ -10,21 +10,19 @@ class Solution:
                 if nums[start] + nums[end] = k, move the right one to let the sum smaller
         """
         nums.sort()
-        start, end = 0, len(nums) - 1
-        biggest = -1
-        while start != end:
-            if nums[start] + nums[end] >= k:
-                end -= 1
+        res = -1
+        left, right = 0, len(nums) - 1
+        while left < right:
+            if nums[left] + nums[right] < k:
+                res = max(res, nums[left] + nums[right])
+                left += 1
             else:
-                biggest = max(biggest, nums[start] + nums[end])
-                start += 1
-        return biggest
+                right -= 1
+        return res
 
 
 if __name__ == '__main__':
     sol = Solution()
-    nums = [10,20,30]
+    nums = [10, 20, 30]
     k = 15
     print(sol.twoSumLessThanK(nums, k))
-
-

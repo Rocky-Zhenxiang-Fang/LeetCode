@@ -1,7 +1,7 @@
 from typing import List
 
 
-class Solution:
+class Solution_2:
     def threeSumClosest(self, nums: List[int], target: int) -> int:
         """
         Idea:
@@ -26,8 +26,10 @@ class Solution:
         return res
 
 
+
+
 if __name__ == '__main__':
-    nums = [0, 2, 1, -3]
-    target = 1
+    nums = [0, 1, 2]
+    target = 3
     sol = Solution()
     print(sol.threeSumClosest(nums, target))

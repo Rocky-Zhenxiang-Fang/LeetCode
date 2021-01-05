@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 
 class Solution:
@@ -13,26 +13,22 @@ class Solution:
 
     def prisonAfterNDays(self, cells: List[int], N: int) -> List[int]:
         """
-        Idea: We know that if we found a status that have already been recorded, this means that we are already in a
-        loop, we can fast forward
+        Idea: Since we know that there are only eight cells, their only be 2^8 different combinations, and the rule
+            only takes the current cells as input, making it possible to loop.
+            Thus, we can memorize the paths, if we encounter a visited situation, we can fast forward
         """
-        cell_day = {}
-        remaining = 0   # if fast forwarded, stores the remaining day that cannot be fast forward
-        for i in range(N):
+        seen = {}
+        day = 0
+        isFasted = False
+        while day < N:
+            day += 1
             next_cell = self.next_day(cells)
-            if tuple(next_cell) in cell_day:
-                loop_length = i - cell_day[tuple(next_cell)]
-                remaining = (N - cell_day[tuple(next_cell)] - 1) % loop_length
-                cells = next_cell
-                break
+            if tuple(next_cell) in seen and not isFasted:
+                day += ((N - day) // (day - seen[tuple(next_cell)])) * (day - seen[tuple(next_cell)])
+                isFasted = True
             else:
-                cell_day[tuple(next_cell)] = i
-                cells = next_cell
-
-        for _ in range(remaining):
-            next_cell = self.next_day(cells)
+                seen[tuple(next_cell)] = day
             cells = next_cell
-
         return cells
 
     def next_day(self, cells: List[int]) -> List[int]:

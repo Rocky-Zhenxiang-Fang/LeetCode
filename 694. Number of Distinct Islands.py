@@ -3,28 +3,27 @@ from typing import List, Set, Tuple
 
 class Solution:
     def numDistinctIslands(self, grid: List[List[int]]) -> int:
-        """
-        Idea: similar to number of islands, but this time, we need to find a way to record "distinct" island
-            To do this, we can use local coordinate, assume that the first point we meet is (0, 0), then record
-            other local coordinates that is "1"
-        """
-        distinct_shapes = set()
-        for row in range(len(grid)):
-            for col in range(len(grid[0])):
-                if grid[row][col] == 1:
+        distinct_islands = set()
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == 1:
                     shape = set()
-                    self.explore(grid, row, col, row, col, shape)
-                    distinct_shapes.add(frozenset(shape))
-        return len(distinct_shapes)
+                    self._explore(i, j, i, j, grid, shape)
+                    distinct_islands.add(frozenset(shape))
+        return len(distinct_islands)
 
-    def explore(self, grid: List[List[int]], row: int, col: int, row_o: int, col_o: int, shape: Set[Tuple[int, int]]):
+    def _explore(self, o_r, o_c, row, col, grid, shape):
+        """
+        get the local coordinate of an island and store it in shape
+        """
         if 0 <= row < len(grid) and 0 <= col < len(grid[0]) and grid[row][col] == 1:
+            shape.add((row - o_r, col - o_c))
             grid[row][col] = 0
-            shape.add((row - row_o, col - col_o))
-            self.explore(grid, row + 1, col, row_o, col_o, shape)
-            self.explore(grid, row - 1, col, row_o, col_o, shape)
-            self.explore(grid, row, col + 1, row_o, col_o, shape)
-            self.explore(grid, row, col - 1, row_o, col_o, shape)
+            self._explore(o_r, o_c, row + 1, col, grid, shape)
+            self._explore(o_r, o_c, row - 1, col, grid, shape)
+            self._explore(o_r, o_c, row, col + 1, grid, shape)
+            self._explore(o_r, o_c, row, col - 1, grid, shape)
+        return
 
 
 if __name__ == '__main__':
