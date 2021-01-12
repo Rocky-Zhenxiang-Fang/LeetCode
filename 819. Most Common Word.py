@@ -3,34 +3,26 @@ from typing import List
 
 class Solution:
     def mostCommonWord(self, paragraph: str, banned: List[str]) -> str:
-        from collections import defaultdict
-        # 1). replace the punctuations with spaces,
-        #      and put all letters in lower case
-        normalized_str = ''.join([c.lower() if c.isalnum() else ' ' for c in paragraph])
-
-        # 2). split the string into words
-        words = normalized_str.split()
-
-        word_count = defaultdict(int)
-        banned_words = set(banned)
-
-        # 3). count the appearance of each word, excluding the banned words
-        for word in words:
-            if word not in banned_words:
-                word_count[word] += 1
-
-        # 4). return the word with the highest frequency
+        from collections import Counter
+        paragraph = paragraph.lower()
+        banned = set(banned)
+        banned.add(" ")
+        punctuations = "!?',;."
+        for p in punctuations:
+            paragraph = paragraph.replace(p, " ")
+        counter = Counter(paragraph.split())
         max_occur = 0
-        res = ""
-        for w in word_count:
-            if word_count[w] > max_occur:
-                max_occur = word_count[w]
-                res = w
+        res = " "
+        for k in counter:
+            v = counter[k]
+            if k not in banned and v > max_occur:
+                max_occur = v
+                res = k
         return res
 
 
 if __name__ == '__main__':
-    paragraph = "Bob. hIt, baLl"
+    paragraph = "Bob hit a ball, the hit BALL flew far after it was hit."
     banned = ["hit"]
     sol = Solution()
     print(sol.mostCommonWord(paragraph, banned))
