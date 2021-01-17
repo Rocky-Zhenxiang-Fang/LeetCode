@@ -1,25 +1,26 @@
 class Solution:
     def buddyStrings(self, A: str, B: str) -> bool:
+        from collections import Counter
         if len(A) != len(B):
             return False
-        left, right = 0, len(A) - 1
-        swapped = False
-        need_swap = False
-        while left < right:
-            if A[left] == B[left]:
-                left += 1
-            elif A[right] == B[right]:
-                need_swap = True
-                right -= 1
-            else:
-                if A[left] == B[right] and A[right] == B[left] and not swapped:
-                    left += 1
-                    right -= 1
-                    swapped = True
-                    need_swap = False
+        if A == B:
+            counter = Counter(A)
+            for k in counter:
+                if counter[k] > 1:
+                    return True
+            return False
+        diff1, diff2 = -1, -1
+        for i in range(len(A)):
+            if A[i] != B[i]:
+                if diff1 == -1:
+                    diff1 = i
+                elif diff2 == -1:
+                    diff2 = i
                 else:
                     return False
-        return not need_swap
+        if diff1 != -1 and diff2 == -1:
+            return False
+        return A[diff1] == B[diff2] and A[diff2] == B[diff1]
 
 
 if __name__ == '__main__':
