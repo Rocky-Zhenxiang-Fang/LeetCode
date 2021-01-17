@@ -1,16 +1,24 @@
 class Solution:
     def maximumSwap(self, num: int) -> int:
+        """
+        Idea:
+            1. We want to put the first k number as sorted order (Not a good example)
+            2. If two same number, swap the later one
+            3. Going from right to left, do two judgements
+                1. check if this number is bigger then nums[temp_right], if so, meaning that this number should be swap ahead
+                2. check if this number is smaller then nums[temp_right], if so, meaning that this number should be swap
+                behind.
+            # additional temp_right is used to prevent update right before finding a pair
+        """
         nums = [int(n) for n in str(num)]
-        max_id = len(nums) - 1
-        left, right = 0, 0
+        left, right, temp_right = 0, 0, len(nums) - 1
         for i in range(len(nums) - 1, -1, -1):
-            if nums[i] > nums[max_id]:
-                max_id = i  # found someone bigger then the current pair
-            elif nums[i] < nums[max_id]:
-                left, right = i, max_id  # found a pair that is swappable
-        # since its going from right to left, left will getting smaller, and the result number will be bigger
+            if nums[i] > nums[temp_right]:
+                temp_right = i
+            elif nums[i] < nums[temp_right]:
+                left, right = i, temp_right
         nums[left], nums[right] = nums[right], nums[left]
-        return int("".join([str(x) for x in nums]))
+        return int("".join([str(n) for n in nums]))
 
 
 if __name__ == '__main__':
