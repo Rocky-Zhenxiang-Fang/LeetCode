@@ -5,19 +5,20 @@ class Solution:
     def sortedSquares(self, nums: List[int]) -> List[int]:
         """
         Idea:
-            Two pointers, starting from the start and the end, put the one that have the bigger abs() into res
+            The input array is kinda sorted, with the both side bigger then the middle
+            Thus, we can make the result array and fill it backwards
         """
-        res = []
-        left, right = 0, len(nums) - 1
-        while left <= right:
-            if abs(nums[left]) > abs(nums[right]):
-                res.append(nums[left] ** 2)
+        res = [0 for _ in range(len(nums))]
+        left, right, ptr = 0, len(res) - 1, len(res) - 1
+        while ptr >= 0:
+            if nums[left] ** 2 > nums[right] ** 2:
+                res[ptr] = nums[left] ** 2
                 left += 1
             else:
-                res.append(nums[right] ** 2)
+                res[ptr] = nums[right] ** 2
                 right -= 1
-
-        return res[::-1]
+            ptr -= 1
+        return res
 
 
 if __name__ == '__main__':

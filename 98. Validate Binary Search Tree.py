@@ -15,8 +15,8 @@ class Solution:
 
         def post_order(node: TreeNode):
             """
-                returns the (max, min) of a subtree
-                """
+            returns the (max, min) of a subtree
+            """
             if not self.flag: return 0, 0
             left_vals = (-float("inf"), float("inf"))
             right_vals = (-float("inf"), float("inf"))

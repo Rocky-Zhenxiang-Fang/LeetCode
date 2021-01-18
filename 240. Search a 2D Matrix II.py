@@ -2,29 +2,38 @@ from typing import List
 
 
 class Solution:
+    def searchMatrix_mlogn(self, matrix: List[List[int]], target: int) -> bool:
+        """
+        Do a binary search on each row
+        """
+        for i in range(len(matrix)):
+            left, right = 0, len(matrix[i]) - 1
+            while left <= right:
+                mid = (left + right) // 2
+                if matrix[i][mid] == target:
+                    return True
+                elif matrix[i][mid] > target:
+                    right = mid - 1
+                else:
+                    left = mid + 1
+        return False
+
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
         """
-        Idea: pick rows that might contain the target, then do binary search
+        Idea:
+            Since it is sorted, we can start from the antidiagonal, if smaller then target, move upward, if bigger,
+            move right
         """
-
-        if not len(matrix) or not len(matrix[0]):
-            # Quick response for empty matrix
+        if not matrix:
             return False
-        h, w = len(matrix), len(matrix[0])
-        for row in matrix:
-            # range check
-            if row[0] <= target <= row[-1]:
-                # launch binary search on current possible row
-                left, right = 0, w - 1
-                while left <= right:
-                    mid = left + (right - left) // 2
-                    mid_value = row[mid]
-                    if target > mid_value:
-                        left = mid + 1
-                    elif target < mid_value:
-                        right = mid - 1
-                    else:
-                        return True
+        row, col = len(matrix) - 1, 0
+        while row >= 0 and col < len(matrix[0]):
+            if matrix[row][col] == target:
+                return True
+            elif matrix[row][col] < target:
+                col += 1
+            else:
+                row -= 1
         return False
 
 
@@ -40,4 +49,4 @@ if __name__ == '__main__':
     mat_2 = [[-1, 3]]
     tar_2 = 3
     sol = Solution()
-    print(sol.searchMatrix(mat_2, tar_2))
+    print(sol.searchMatrix(mat, tar))
