@@ -4,31 +4,23 @@ from typing import List
 class Solution:
     def countArrangement(self, n: int) -> int:
         """
-        For each good arrangement, all elements are divisible by its index + 1 or its index + 1 is divisible by its element
-        Idea:
-            DFS and backtracking
-            DFS:
-                if all elements are used, ans += 1
-                if not:
-                    add the remaining elements one at a time:
-                        if the element can be added:
-                            digger further
-                        if not:
-                            try next number
+        Backtracking
+            Do dfs, and add one if find a permutation
+            stop early if found a wrong number is placed
         """
-        self.res = 0
+        self.ans = 0
+        nums = [i for i in range(1, n + 1)]
+        self._dfs([], nums, n)
+        return self.ans
 
-        def dfs(sub: List[int], remaining: List[int]):
-            if not remaining:
-                self.res += 1
-            else:
-                for i in range(len(remaining)):
-                    if remaining[i] % (len(sub) + 1) == 0 or (len(sub) + 1) % remaining[i] == 0:
-                        dfs(sub + [remaining[i]], remaining[:i] + remaining[i + 1:])
-
-        dfs([], [ele + 1 for ele in range(n)])
-
-        return self.res
+    def _dfs(self, sub, remaining, target):
+        if sub and not ((len(sub)) % sub[-1] == 0 or sub[-1] % (len(sub)) == 0):
+            return
+        if len(sub) == target:
+            self.ans += 1
+        else:
+            for i in range(len(remaining)):
+                self._dfs(sub + [remaining[i]], remaining[:i] + remaining[i + 1:], target)
 
 
 if __name__ == '__main__':
