@@ -3,12 +3,21 @@ from typing import List
 
 class Solution:
     def maxArea(self, height: List[int]) -> int:
-        result = 0
+        """
+        Idea:
+            Brute Force: try all possibility. O(n^2)
+            Optimal:
+                Observe:
+                    The volume is dominated by the lower bound. Thus, we want to move the lower bound
+                Solution:
+                    Two pointer
+        """
+        res = 0
         left, right = 0, len(height) - 1
-        while left < right:
-            result = max(result, (right - left) * min(height[right], height[left]))
-            if height[left] > height[right]:
-                right -= 1
-            else:
+        while left <= right:
+            res = max(res, min(height[left], height[right]) * (right - left))
+            if height[left] < height[right]:
                 left += 1
-        return result
+            else:
+                right -= 1
+        return res
