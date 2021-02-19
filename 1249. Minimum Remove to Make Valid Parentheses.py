@@ -1,44 +1,39 @@
 class Solution:
     def minRemoveToMakeValid(self, s: str) -> str:
-        """
-        Idea:
-            If a right parentheses is valid, there must be at least one remaining left parentheses for it to pair with
-            Vice, versa.
-            Do two iterations:
-                1.
-                    when encounter a left parentheses, increase left counter
-                    when encounter a right paretheses, only include it if there are remaining left
-                2.
-                    Do the same thing, but remove left parentheses
-        """
-        res = ""
-        real_res = ""
-        left = 0
+        valid = [False for _ in range(len(s))]
+        prev_count = 0
         paired = 0
-        for c in s:
-            if c == "(":
-                res += c
-                left += 1
-            elif c == ")":
-                if left > 0:
-                    res += c
-                    left -= 1
+        for i in range(len(s)):
+            if s[i] == "(":
+                prev_count += 1
+                valid[i] = True
+            elif s[i] == ")":
+                if prev_count > 0:
+                    prev_count -= 1
                     paired += 1
-            else:
-                res += c
-
-        for r in res:
-            if r == "(":
-                if paired <= 0:
-                    continue
+                    valid[i] = True
                 else:
-                    paired -= 1
-            real_res += r
-
-        return real_res
+                    valid[i] = False
+            else:
+                valid[i] = True
+        prev_count = 0
+        for j in range(len(s) - 1, -1, -1):
+            if valid[j]:
+                if s[j] == ")":
+                    prev_count += 1
+                elif s[j] == "(":
+                    if prev_count <= 0:
+                        valid[j] = False
+                    else:
+                        prev_count -= 1
+        res = []
+        for i in range(len(valid)):
+            if valid[i]:
+                res.append(s[i])
+        return "".join(res)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    s = "lee(t(c)o)de)"
+    s = "))(("
     print(sol.minRemoveToMakeValid(s))
