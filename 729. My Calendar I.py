@@ -5,6 +5,7 @@ class BSTNode:
         self.left = None
         self.right = None
 
+
 class MyCalendar:
     """
     Idea:
