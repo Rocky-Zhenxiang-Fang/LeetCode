@@ -1,0 +1,13 @@
+from DS import TreeNode
+
+
+class Solution:
+    def flipEquiv(self, root1: TreeNode, root2: TreeNode) -> bool:
+        def same_left_right(node1: TreeNode, node2: TreeNode) -> bool:
+            if not node1 and not node2:
+                return True
+            elif not node1 or not node2 or node1.val != node2.val:
+                return False
+            return (same_left_right(node1.left, node2.left) and same_left_right(node1.right, node2.right)) \
+                   or (same_left_right(node1.right, node2.left) and same_left_right(node1.left, node2.right))
+        return same_left_right(root1, root2)
