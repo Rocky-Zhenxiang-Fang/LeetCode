@@ -3,29 +3,38 @@ from typing import List
 
 class Solution:
     def longestSubarray(self, nums: List[int], limit: int) -> int:
+        """
+        Idea:
+            For a subarray problem, left and right pointer are used
+            as long as condition is satisfied, right += 1
+            otherwise, left += 1
+            We only care about the biggest and the smallest value, all possible values are stored in monotonic deque
+            For min_deque, all values are stored in increasing order. If a value smaller then the end of min_deque,
+            then the old end will never be considered a smallest value, so remove it
+            Storing index for removing at when left updates
+        """
         from collections import deque
-        left, right = 0, 0
-        max_len = 0
-        min_que, max_que = deque(), deque()
+        left = right = 0
+        min_deque = deque()
+        max_deque = deque()
+        res = 0
         while right < len(nums):
-            while min_que and nums[right] <= nums[min_que[-1]]:
-                min_que.pop()
-            while max_que and nums[right] >= nums[max_que[-1]]:
-                max_que.pop()
-            min_que.append(right)
-            max_que.append(right)
-
-            while nums[max_que[0]] - nums[min_que[0]] > limit:
+            while min_deque and nums[min_deque[-1]] > nums[right]:
+                min_deque.pop()
+            while max_deque and nums[max_deque[-1]] < nums[right]:
+                max_deque.pop()
+            min_deque.append(right)
+            max_deque.append(right)
+            if nums[max_deque[0]] - nums[min_deque[0]] > limit:
                 left += 1
-                if min_que[0] < left:
-                    min_que.popleft()
-                if max_que[0] < left:
-                    max_que.popleft()
-
-            max_len = max(max_len, right - left + 1)
+                if min_deque[0] < left:
+                    min_deque.popleft()
+                if max_deque[0] < left:
+                    max_deque.popleft()
+            res = max(res, right - left + 1)
             right += 1
+        return res
 
-        return max_len
 
 
 if __name__ == '__main__':
