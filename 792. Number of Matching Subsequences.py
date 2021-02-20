@@ -1,28 +1,24 @@
 from typing import List
 
 
-class Solution(object):
-    def numMatchingSubseq(self, S, words):
-        ans = 0
-        heads = [[] for _ in range(26)]
-        for word in words:
-            it = iter(word)
-            heads[ord(next(it)) - ord('a')].append(it)
-
-        for letter in S:
-            letter_index = ord(letter) - ord('a')
-            old_bucket = heads[letter_index]
-            heads[letter_index] = []
-
-            while old_bucket:
-                it = old_bucket.pop()
-                nxt = next(it, None)
-                if nxt:
-                    heads[ord(nxt) - ord('a')].append(it)
+class Solution:
+    def numMatchingSubseq(self, S: str, words: List[str]) -> int:
+        iters = [[] for _ in range(26)]
+        res = 0
+        for w in words:
+            it = iter(w)
+            iters[ord(next(it)) - ord("a")].append(it)
+        for ch in S:
+            old_its = iters[ord(ch) - ord("a")]
+            iters[ord(ch) - ord("a")] = []
+            while old_its:
+                it = old_its.pop()
+                value = next(it, None)
+                if not value:
+                    res += 1
                 else:
-                    ans += 1
-
-        return ans
+                    iters[ord(value) - ord("a")].append(it)
+        return res
 
 
 if __name__ == '__main__':
