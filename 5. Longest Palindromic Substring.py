@@ -1,30 +1,29 @@
 class Solution(object):
-    def longestPalindrome(self, s) -> str:
+    def longestPalindrome(self, s: str) -> str:
         """
         Idea:
-            A palindrome could be one of the two types:
-                1. [a] + b + [a]
-                2. [a] + b + b + [a]
-            So we can check both types using each elements as b
+            This problem cannot be optimized to less then O(n**2) since there are no dependency between sub-problems
+            For a Palindromic, it is [a] + b + [a'] or  [a] + b + b + [a']
+            Create a helper function with two pointers, when two pointers are not equal, return the length
         """
-        ans = ""
+        res = ""
         for i in range(len(s)):
-            sub = self.find_palindrome(s, i, i)
-            if len(sub) > len(ans):
-                ans = sub
-            sub = self.find_palindrome(s, i, i + 1)
-            if len(sub) > len(ans):
-                ans = sub
-        return ans
+            temp = self._max_palindrome(s, i, i)
+            if len(temp) > len(res):
+                res = temp
+        for i in range(1, len(s)):
+            temp = self._max_palindrome(s, i- 1, i)
+            if len(temp) > len(res):
+                res = temp
+        return res
 
-    def find_palindrome(self, s, left, right) -> str:
+    def _max_palindrome(self, s: str, left: int, right: int):
         while left >= 0 and right < len(s) and s[left] == s[right]:
             left -= 1
             right += 1
-        return "".join(s[left + 1: right])
-
+        return s[left + 1: right]
 
 if __name__ == '__main__':
-    s = "cbbd"
+    s = "ac"
     sol = Solution()
     print(sol.longestPalindrome(s))
