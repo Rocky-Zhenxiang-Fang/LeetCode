@@ -1,20 +1,18 @@
 class TicTacToe:
     """
     Idea:
-        How can a player win a game?
-            if he complete an entire row, col, or diagonal
-        We can have array for row, col, diagonal to check if any player have win the game
+        In each move, check if a row, col, dia is filled
+        If not, update the corresponding array of the value
     """
 
     def __init__(self, n: int):
         """
         Initialize your data structure here.
         """
-        self.size = n
-        self.row = [0 for _ in range(n)]
-        self.col = [0 for _ in range(n)]
+        self.rows = [0] * n
+        self.cols = [0] * n
         self.dia = 0
-        self.anti_dia = 0
+        self.an_dia = 0
 
     def move(self, row: int, col: int, player: int) -> int:
         """
@@ -27,18 +25,16 @@ class TicTacToe:
                 1: Player 1 wins.
                 2: Player 2 wins.
         """
-        if player == 1:
-            movement = 1
-        else:
-            movement = -1
-        self.row[row] += movement
-        self.col[col] -= movement
+        self.rows[row] = self.rows[row] + 1 if player == 1 else self.rows[row] - 1
+        self.cols[col] = self.cols[col] + 1 if player == 1 else self.cols[col] - 1
         if row == col:
-            self.dia += movement
-        if row + col == self.size - 1:
-            self.anti_dia += movement
-        if abs(self.row[row]) == self.size or abs(self.col[col]) == self.size or abs(self.dia) == self.size or abs(self.anti_dia) == self.size:
-            return player
+            self.dia = self.dia + 1 if player == 1 else self.dia - 1
+        if row + col + 1 == len(self.rows):
+            self.an_dia = self.an_dia + 1 if player == 1 else self.an_dia - 1
+        if self.dia == len(self.rows) or self.an_dia == len(self.rows) or self.rows[row] == len(self.rows) or self.cols[col] == len(self.cols):
+            return 1
+        elif self.dia == -len(self.rows) or self.an_dia == -len(self.rows) or self.rows[row] == -len(self.rows) or self.cols[col] == -len(self.cols):
+            return 2
         else:
             return 0
 
