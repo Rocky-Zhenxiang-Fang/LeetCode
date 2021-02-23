@@ -18,7 +18,7 @@ class Solution:
                     left = mid + 1
         return False
 
-    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+    def searchMatrix_space(self, matrix: List[List[int]], target: int) -> bool:
         """
         Idea:
             Since it is sorted, we can start from the antidiagonal, if smaller then target, move upward, if bigger,
@@ -35,7 +35,6 @@ class Solution:
             else:
                 row -= 1
         return False
-
 
 if __name__ == '__main__':
     mat = [
