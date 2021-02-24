@@ -4,24 +4,26 @@ from typing import List
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         """
-        Idea: if two interval can be merged, the bigger start must be in between the smaller start and smaller end
-            Thus, we can first sort intervals by the start point, and check if intervals can be merged
-            If cannot be merged, add the interval into the res
+        Idea:
+            Sort intervals by start, this ensures that we don't need to revisit intervals
+            Two intervals can be merged if range1[0] <= range2[0] <= range1[1]
         """
-        res = []
         intervals.sort(key=lambda x: x[0])
-        start, end = intervals[0][0], intervals[0][1]
+        stack = []
         for i in intervals:
-            if start <= i[0] <= end:
-                end = max(end, i[1])
-            else:
-                res.append([start, end])
-                start, end = i[0], i[1]
-        res.append([start, end])
-        return res
+            while stack:
+                prev = stack.pop()
+                if prev[0] <= i[0] <= prev[1]:
+                    i = [prev[0], max(prev[1], i[1])]
+                else:
+                    stack.append(prev)
+                    break
+            stack.append(i)
+
+        return stack
 
 
 if __name__ == '__main__':
-    arr = [[2,3],[2,2],[3,3],[1,3],[5,7],[2,2],[4,6]]
+    arr = [[1,3],[2,6],[8,10],[15,18]]
     sol = Solution()
     print(sol.merge(arr))
