@@ -2,58 +2,23 @@
 # @param version, an integer
 # @return an integer
 
-def isBadVersion(version):
-    if version >= 4:
-        return True
-    else:
-        return False
+def isBadVersion(ver):
+    pass
 
 
 class Solution:
-    def firstBadVersionRec(self, n):
-        """
-        :type n: int
-        :rtype: int
-        """
-        return self.binarySearch(1, n)
-
     def firstBadVersion(self, n):
         """
-        :type n: int
-        :rtype: int
+        Idea:
+            Do a binary search, find the bad version that is next to good version
         """
-        first = 1
-        end = n
-        while first <= end:
-            if first == end or first == end - 1:
-                if isBadVersion(first):
-                    return first
-                return end
-            mid = (first + end)
-            if isBadVersion(mid):
-                end = mid
+        left, right = 0 , n
+        while left <= right:
+            mid = (left + right) // 2
+            if (mid == 1 and isBadVersion(mid)) or (mid != 1 and not isBadVersion(mid - 1) and isBadVersion(mid)):
+                return mid
+            elif not isBadVersion(mid):
+                left = mid + 1
             else:
-                first = mid
-        return None
-
-    def binarySearch(self, start, end):
-        # if only have two number left, then it is
-        # [false, false, ..., false, true, true, ...]
-        # [                   start, end, ..........]
-        # or
-        # [true, true, ..., true, true, true, ...]
-        # [start, end, ..........]
-        if start == end - 1:
-            if isBadVersion(start):
-                return start
-            return end
-        half = (start + end) // 2
-        if isBadVersion(half):
-            return self.binarySearch(start, half)
-        else:
-            return self.binarySearch(half, end)
-
-
-if __name__ == '__main__':
-    sol = Solution()
-    print(sol.firstBadVersion(5))
+                right = mid - 1
+        return -1

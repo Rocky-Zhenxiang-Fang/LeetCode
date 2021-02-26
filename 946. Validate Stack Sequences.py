@@ -11,10 +11,10 @@ class Solution:
                 check if the stack is empty after
         """
         stack = []
-        pop_id = 0
-        for push_id in range(len(pushed)):
-            stack.append(pushed[push_id])
-            while stack and stack[-1] == popped[pop_id]:
+        id = 0
+        for p in pushed:
+            stack.append(p)
+            while stack and stack[-1] == popped[id]:
                 stack.pop()
-                pop_id += 1
+                id += 1
         return len(stack) == 0
