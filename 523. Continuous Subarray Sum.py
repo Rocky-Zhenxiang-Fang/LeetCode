@@ -3,20 +3,24 @@ from typing import List
 
 class Solution:
     def checkSubarraySum(self, nums: List[int], k: int) -> bool:
-        if len(nums) < 2:
-            return False
+        """
+        Idea:
+            Similar to subarray sum to k
+            Instead of storing the sum of visited subarray, we store sum % k.
+            If we meet running_sum % k - (visited_sum % k) == 0, this means that this two sum to a multiplication of k
+            Take care if k == 0
+        """
+        visited = {0: -1}
         running_sum = 0
-        sums = {0: -1}
-        k = abs(k)
         for i in range(len(nums)):
             running_sum += nums[i]
-            n = running_sum // k if k != 0 else 1
-            for j in range(n):
-                target1 = running_sum - j * k if k != 0 else -running_sum
-                if target1 in sums and i - sums[target1] > 1:
+            if k != 0:
+                running_sum %= k
+            if running_sum in visited:
+                if i - visited[running_sum] > 1:
                     return True
-            if running_sum not in sums:
-                sums[running_sum] = i
+            else:
+                visited[running_sum] = i
         return False
 
 
