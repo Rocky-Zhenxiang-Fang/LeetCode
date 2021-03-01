@@ -7,22 +7,21 @@ class Solution:
     def delNodes(self, root: TreeNode, to_delete: List[int]) -> List[TreeNode]:
         """
         Idea:
-            If a node has no parent and do not need to be deleted, this is a answer
-            Use preorder to assign left and right node
+            After delete, a node will be a root if and only if it does not have a parent and itself haven't be deleted
+            Also, if it self is deleted, it should let it parent know so that the parent can remove that leg
+        Alg:
+            Do DFS, pass in node, does it have a parent
         """
         res = []
         to_delete = set(to_delete)
 
-        def pre_order(node: TreeNode, has_parent: bool) -> Optional[TreeNode]:
+        def dfs(node: TreeNode, parent: bool) -> Optional[TreeNode]:
             if node:
-                delete = False
-                if node.val in to_delete:  # check if this node should be delete
-                    delete = True
-                if not has_parent and not delete:
+                delete = node.val in to_delete
+                if not parent and not delete:
                     res.append(node)
-                node.left = pre_order(node.left, not delete)
-                node.right = pre_order(node.right, not delete)
-                return node if not delete else None  # if deleted, the parent should not have this node
-
-        pre_order(root, False)
+                node.left = dfs(node.left, not delete)
+                node.right = dfs(node.right, not delete)
+                return node if not delete else None
+        dfs(root, False)
         return res

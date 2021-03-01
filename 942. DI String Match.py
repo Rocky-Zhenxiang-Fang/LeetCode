@@ -11,16 +11,16 @@ class Solution:
                 If seeing "D", put the biggest available number
         """
         res = []
-        small, big = 0, len(S)
-        for i in range(len(S)):
-            if S[i] == "I":
-                res.append(small)
-                small += 1
+        left, right = 0, len(S)
+        for ch in S:
+            if ch == "I":
+                res.append(left)
+                left += 1
             else:
-                res.append(big)
-                big -= 1
-        res.append(small)   # the last element left
-        return res
+                res.append(right)
+                right -= 1
+        return res + [left]
+
 
 if __name__ == '__main__':
     sol = Solution()
