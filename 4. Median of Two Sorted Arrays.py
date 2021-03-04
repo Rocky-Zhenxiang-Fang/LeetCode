@@ -27,16 +27,14 @@ class Solution:
 
         # if sum of two median's indicies is smaller than k
         if (middle1 + middle2) < k:
-            # if nums1 median value bigger than nums2, then nums2's first half will always be positioned before nums1's
-            # median, so k would never be in num2's first half
+            # if nums1 median value bigger than nums2, then nums2's first half will always be positioned before nums1's median, so k would never be in num2's first half
             if middle1_value > middle2_value:
                 return self.get_kth(nums1, nums2, start1, end1, middle2 + 1, end2, k)
             else:
                 return self.get_kth(nums1, nums2, middle1 + 1, end1, start2, end2, k)
         # if sum of two median's indicies is bigger than k
         else:
-            # if nums1 median value bigger than nums2, then nums2's first half would be merged before nums1's first
-            # half, thus k always come before nums1's median, then nums1's second half would never include k
+            # if nums1 median value bigger than nums2, then nums2's first half would be merged before nums1's first half, thus k always come before nums1's median, then nums1's second half would never include k
             if middle1_value > middle2_value:
                 return self.get_kth(nums1, nums2, start1, middle1 - 1, start2, end2, k)
             else:
