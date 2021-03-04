@@ -18,19 +18,18 @@ class Solution:
                     the subarray is verified, store its length
                     initialize right = -1
         """
-        right_index = {}
+        rights = {}
         res = []
         for i in range(len(S) - 1, -1, -1):
-            if S[i] not in right_index:
-                right_index[S[i]] = i
-        right = right_index[S[0]]
+            if S[i] not in rights:
+                rights[S[i]] = i
+        left, right_most = 0, 0
         for i in range(len(S)):
-            right = max(right_index[S[i]], right)
-            if i == right:
-                res.append(right - sum(res) + 1)
-                right = 0
+            right_most = max(right_most, rights[S[i]])
+            if i == right_most:
+                res.append(right_most - left + 1)
+                left = right_most + 1
         return res
-
 
 if __name__ == '__main__':
     S = "caedbdedda"
