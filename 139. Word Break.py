@@ -4,26 +4,26 @@ from typing import List
 class Solution:
     def wordBreak(self, s: str, wordDict: List[str]) -> bool:
         """
-        Idea, when appending a char, see if it can combine to any previous segmentation and still form a word
-        For example, assuming that we are at index 5 and we already know that s[:3] can form a valid set, if s[4:5] can
-        form a valid set, then dp[i] will be true
+        Idea:
+            When adding a char, see if s[:i] belongs to a word
+            Also, assuming that there a s[:j] that form a string, then we also want to check if s[j + 1: i] forms a word
         """
-        wordSet = set(wordDict)
-        dp = [False for _ in range(len(s) + 1)]     # the first one is True so that each iteration will search s[:i]
+        words = set(wordDict)
+        dp = [False] * (len(s) + 1)
         dp[0] = True
-        for i in range(1, len(dp)):
-            for j in range(i):
-                if dp[j]:
-                    print(s[j: i])
-                    if s[j: i] in wordSet:
-                        dp[i] = True
-                        break
+        for i in range(len(s)):
+            for j in range(i + 1):
+                if dp[j] and s[j: i + 1] in words:
+                    dp[i + 1] = True
+                    break
         return dp[-1]
 
 
 if __name__ == '__main__':
     s = "leetcode"
     wordDict = ["leet", "code"]
+    s_2 = "a"
+    w_2 = ["a"]
     sol = Solution()
-    print(sol.wordBreak(s, wordDict))
+    print(sol.wordBreak(s_2, w_2))
 

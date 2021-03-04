@@ -1,28 +1,30 @@
 from typing import List
+import heapq
 
 
 class Solution:
     def minMeetingRooms(self, intervals: List[List[int]]) -> int:
         """
-        This question is asking the max number of overlapping intervals
-        We need a room for each start and clear up a room in each end
-        Thus, we can sort each time and record if it is start or end
-        if start, +1 room, if end -1 room
-        return the max value between
+        This number is asking maximum number of overlapping rooms
+        When a meeting starts, we need one room, when one ends, we can release one room
+        We can keep a track of how many rooms are used by +1 at start and -1 at end
+        Sort each time regarding which meeting does it belongs to
         """
-        import heapq
-        times = []
-        heapq.heapify(times)
-        rooms = 0
-        max_rooms = 0
+        heap = []
+        max_room = 0
+        curr_room = 0
+        heapq.heapify(heap)
         for i in intervals:
-            heapq.heappush(times, (i[0], 1))
-            heapq.heappush(times, (i[1], -1))
-        while times:
-            t = heapq.heappop(times)
-            rooms += t[1]
-            max_rooms = max(rooms, max_rooms)
-        return max_rooms
+            heapq.heappush(heap, (i[0], "start"))
+            heapq.heappush(heap, (i[1], "end"))
+        while heap:
+            t, condition = heapq.heappop(heap)
+            if condition == "start":
+                curr_room += 1
+                max_room = max(max_room, curr_room)
+            else:
+                curr_room -= 1
+        return max_room
 
 
 if __name__ == '__main__':
