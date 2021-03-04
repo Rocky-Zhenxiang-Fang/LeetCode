@@ -1,74 +1,58 @@
-from typing import List
+from typing import List, Dict, Set
+
 
 class Trie:
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
-        self.dict = {}
+        self.check = {}
 
-    def insert(self, word: str) -> None:
-        """
-        Inserts a word into the trie.
-        """
-        ite = self.dict
-        for c in word:
-            if c not in ite:
-                ite[c] = {}
-            ite = ite[c]
+    def insert(self, word: str):
+        ite = self.check
+        for ch in word:
+            if ch not in ite:
+                ite[ch] = {}
+            ite = ite[ch]
         ite["#"] = "#"
 
 
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        def dfs(currBoard, tree: dict, i, j, result, path='') -> None:
-            """
-            :param currBoard: board
-            :param tree: dict of trie at current level
-            :param i: row of the board
-            :param j: column of the board
-            :param result: res
-            :param path: added word
-            """
-            if currBoard[i][j] not in tree:
-                return
-            else:
-                tree: dict = tree[currBoard[i][j]]
-                c = currBoard[i][j]
-                path += c
-                currBoard[i][j] = '*'
-                if "#" in tree:
-                    result.append(path)
-                    tree.pop("#")
-                if i != 0:
-                    dfs(currBoard, tree, i - 1, j, result, path)
-                if i != len(currBoard) - 1:
-                    dfs(currBoard, tree, i + 1, j, result, path)
-                if j != 0:
-                    dfs(currBoard, tree, i, j - 1, result, path)
-                if j != len(currBoard[0]) - 1:
-                    dfs(currBoard, tree, i, j + 1, result, path)
-                currBoard[i][j] = c
-
-        res, trie = [], Trie()
-        t = trie.dict
-        for word in words:
-            trie.insert(word)
-
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                dfs(board, t, i, j, res,)
-
+        """
+        Idea:
+            Naive: search each words one by one as if is a Word search problem. Cost a lot of time
+            Advance: Use a trie to prevent dealing the same prefix multiple time
+        Alg:
+            Construct a trie
+            for each cell in board:
+                if it is in the first layer of trie:
+                    do dfs to find if we can find a word by moving in four direction
+        """
+        trie = Trie()
+        res = []
+        for w in words:
+            trie.insert(w)
+        for r in range(len(board)):
+            for c in range(len(board[0])):
+                self.dfs(board, trie.check, r, c, res, [])
         return res
+
+    def dfs(self, board: List[List[str]], trie: Dict, row: int, col: int, res: List[str], prefix: [], ):
+        if board[row][col] in trie:
+            ch = board[row][col]
+            board[row][col] = "-"       # this prevents using a visited set
+            prefix.append(ch)
+            if "#" in trie[ch]:
+                res.append("".join(prefix))
+                trie[ch].pop("#")   # this prevents duplicates
+            for m in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
+                nr, nc = row + m[0], col + m[1]
+                if 0 <= nr < len(board) and 0 <= nc < len(board[0]):
+                    self.dfs(board, trie[ch], nr, nc, res, prefix)
+            prefix.pop()
+            board[row][col] = ch
 
 
 if __name__ == '__main__':
     sol = Solution()
-    board = [
-        ['o', 'a', 'a', 'n'],
-        ['e', 't', 'a', 'e'],
-        ['i', 'h', 'k', 'r'],
-        ['i', 'f', 'l', 'v']
-    ]
-    words = ["oath", "pea", "eat", "rain"]
+    board = [["o", "a", "b", "n"], ["o", "t", "a", "e"], ["a", "h", "k", "r"], ["a", "f", "l", "v"]]
+    words = ["oa", "oaa"]
     print(sol.findWords(board, words))
