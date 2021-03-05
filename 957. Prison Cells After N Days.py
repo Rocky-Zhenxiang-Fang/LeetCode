@@ -26,7 +26,7 @@ class Solution:
             # with or without the fast-forwarding.
             if N > 0:
                 N -= 1
-                next_day_cells = self.nextDay(cells)
+                next_day_cells = self.next_day(cells)
                 cells = next_day_cells
 
         return cells
