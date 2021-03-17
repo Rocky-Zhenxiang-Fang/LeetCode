@@ -1,10 +1,24 @@
+# Definition for a Node.
 import collections
 
-from DS import TreeNode
+
+class Node:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+        self.parent = None
 
 
 class Solution:
-    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+    def lowestCommonAncestor(self, p: 'Node', q: 'Node') -> 'Node':
+        root = p
+        while root.parent:
+            root = root.parent
+        return self._lowestCommonAncestor_with_root(root, p, q)
+
+
+    def _lowestCommonAncestor_with_root(self, root: 'Node', p: 'Node', q: 'Node') -> 'Node':
         """
         Idea:
             Do BFS, construct a parent dict, when p and q are both in the parent dict, start backtracking
@@ -24,7 +38,7 @@ class Solution:
         if parent[p][1] > parent[q][1]:  # always make sure that p is higher or equal then q
             p, q = q, p
         while p != q:
-            if parent[p][1] == parent[q][1]:    # if both is at the same height
+            if parent[p][1] == parent[q][1]:  # if both is at the same height
                 p = parent[p][0]
                 q = parent[q][0]
             else:
