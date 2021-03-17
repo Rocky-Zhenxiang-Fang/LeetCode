@@ -1,21 +1,32 @@
-from typing import List, Dict
 
-from DS import TreeNode
-import collections
+# Definition for a Node.
+class Node:
+    def __init__(self, val = 0, neighbors = None):
+        self.val = val
+        self.neighbors = neighbors if neighbors is not None else []
+
 
 
 class Solution:
-    def verticalOrder(self, root: TreeNode) -> List[List[int]]:
-        x_map = {}  # col: [values]
-        que = collections.deque([(root, 0)])    # node: col
-        while que:
-            curr, col = que.pop()
-            x_map[col] = x_map.get(col, []) + [curr.val]
-            if curr.left:
-                que.appendleft((curr.left, col - 1))
-            if curr.right:
-                que.appendleft((curr.right, col + 1))
-        res = sorted([(k, v) for k, v in x_map.items()], key=lambda x: x[0])
-        return [x[1] for x in res]
+    def cloneGraph(self, node: 'Node') -> 'Node':
+        """
+        Idea:
+            Do DFS
+            Maintain a copied map that matches the original node to the copied node
+            Also maintain a visited to prevent looking back
+        """
+        if not node:
+            return node
+        stack = [node]
+        copied = {node: Node(node.val)}
+        while stack:
+            curr = stack.pop()
+            for child in curr.neighbors:
+                if child not in copied:
+                    copied[child] = Node(child.val)
+                    stack.append(child)
+                copied[curr].neighbors.append(copied[child])
+        return copied[node]
+
 
 

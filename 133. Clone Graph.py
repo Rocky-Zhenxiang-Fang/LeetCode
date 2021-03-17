@@ -6,30 +6,25 @@ class Node:
 
 
 class Solution:
-
     def cloneGraph(self, node: 'Node') -> 'Node':
         """
         Idea:
-            Do a DFS:
-                For each neighbors:
-                    if neighbor node have not be created:
-                        create the node
-                    link node and neighbor together
+            Do DFS
+            Maintain a copied map that matches the original node to the copied node
+            Also maintain a visited to prevent looking back
         """
-        copy_map = {node: Node(node.val)}
-        visited = set()
+        if not node:
+            return node
         stack = [node]
+        copied = {node: Node(node.val)}
         while stack:
             curr = stack.pop()
-            if curr not in visited:
-                visited.add(curr)
-                for nei in curr.neighbors:
-                    if nei not in copy_map:
-                        copy_map[nei] = Node(nei.val)
-                    copy_map[nei].neighbors.append(copy_map[curr])
-                    copy_map[curr].neighbors.append(copy_map[nei])
-        return copy_map[node]
-
+            for child in curr.neighbors:
+                if child not in copied:
+                    copied[child] = Node(child.val)
+                    stack.append(child)
+                copied[curr].neighbors.append(copied[child])
+        return copied[node]
 
 
 

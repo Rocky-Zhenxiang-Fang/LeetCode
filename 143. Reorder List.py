@@ -1,19 +1,6 @@
 # Definition for singly-linked list.
-class ListNode:
-    def __init__(self, val=0, next=None):
-        self.val = val
-        self.next = next
-
-    @classmethod
-    def array2ListNode(cls, arr):
-        nodeArr = []
-        for i in range(len(arr)):
-            nodeArr.append(ListNode(arr[i]))
-
-        for i in range(len(arr) - 1):
-            nodeArr[i].next = nodeArr[i + 1]
-        return nodeArr[0]
-
+from DS import ListNode
+import DS
 
 class Solution:
     def reorderList(self, head: ListNode) -> None:
@@ -27,61 +14,44 @@ class Solution:
         1. Instead of iterating twice to get the middle point, it can be done using two pointers, fast = slow * 2.
             When fast reaches the end, slow is in the middle
         """
-        import math
-        if not head or not head.next or not head.next.next:
-            return
-        ite = head
-        size = 1
-        while ite.next:
-            size += 1
-            ite = ite.next
-        # Now we have the size
-        ite = head
-        for _ in range(math.ceil(size / 2) - 1):
-            ite = ite.next
-        B = ite.next
-        ite.next = None
-        second = self.reverse(B)
-        self.merge(head, second)
-
-    def reverse(self, node: ListNode) -> ListNode:
-        """
-        reverse a list of node in place
-        """
+        fast, slow = head, head
         prev = None
-        current = node
-        while current:
-            next = current.next
-            current.next = prev
-            prev = current
-            current = next
+        while fast and fast.next:
+            prev = slow
+            slow = slow.next
+            fast = fast.next.next
+        if slow != fast:
+            prev.next = None
+            slow = self._reverse(slow)
+            self._merge(head, slow)
+
+    def _reverse(self, head: ListNode) -> ListNode:
+        prev = None
+        ptr = head
+        while ptr:
+            ptr_next = ptr.next
+            ptr.next = prev
+            prev = ptr
+            ptr = ptr_next
         return prev
 
-    def merge(self, main: ListNode, sec: ListNode) -> None:
-        """
-        merges sec into main in the sequence of
-        m0 -> s0 -> m1 -> s1 ...
-        """
-        ite = main
-        mainTemp = main
-        secTemp = sec
-        flag = 0
-        while mainTemp and secTemp:
-            if flag == 0:
-                mainTemp = mainTemp.next
-                ite.next = secTemp
-            else:
-                secTemp = secTemp.next
-                ite.next = mainTemp
-            flag ^= 1
-            ite = ite.next
+    def _merge(self, head1: ListNode, head2: ListNode):
+        res = ListNode()
+        ptr = res
+        while head1 and head2:
+            ptr.next = head1
+            head1 = head1.next
+            ptr.next.next = head2
+            head2 = head2.next
+            ptr = ptr.next.next
+        ptr.next = head2
 
 
 if __name__ == '__main__':
     arr = [1, 2, 3, 4, 5]
     arr2 = [1, 2, 3, 4]
-    first = ListNode.array2ListNode(arr)
-    second = ListNode.array2ListNode(arr2)
+    first = DS.arr2LinkedNode(arr)
+    second = DS.arr2LinkedNode(arr2)
     sol = Solution()
-    sol.reorderList(second)
+    sol.reorderList(first)
     print(first)
