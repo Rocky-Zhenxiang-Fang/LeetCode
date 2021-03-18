@@ -1,26 +1,25 @@
 class Solution:
     def calculate(self, s: str) -> int:
-        curr, last_num, result, opt = 0, 0, 0, '+'
-        for c in s + '+':
-            if c == ' ': continue
-            if c.isdigit():
-                curr = 10 * curr + int(c)
-                continue
-            if opt == '+':
-                result += last_num
-                last_num = curr
-            elif opt == '-':
-                result += last_num
-                last_num = -curr
-            elif opt == '*':
-                last_num = last_num * curr
-            elif opt == '/':
-                last_num = int(last_num / curr)
-            curr, opt = 0, c
-        return result + last_num
+        curr, stack, sign = 0, [], "+"
+        for i, ch in enumerate(s):
+            if ch.isdigit():
+                curr = curr * 10 + int(ch)
+            if ch in {"+", "-", "*", "/"} or i == len(s) - 1:
+                if sign == "+":
+                    stack.append(curr)
+                elif sign == "-":
+                    stack.append(-curr)
+                elif sign == "*":
+                    stack.append(stack.pop() * curr)
+                else:
+                    stack.append(int(stack.pop() / curr))
+                sign = ch
+                curr = 0
+
+        return sum(stack)
 
 
 if __name__ == '__main__':
     sol = Solution()
-    s = "19 + 23 - 47 * 100 / 20 + 5"
+    s = "3+2*2"
     print(sol.calculate(s))
