@@ -1,28 +1,49 @@
-from typing import List
+from typing import List, Tuple
 
 from DS import TreeNode
 import collections
 
 
-class Solution:
-    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
-        included = {}
-        left, right = 0, 0
-        res = 0
-        while right < len(s):
-            while len(included) <= k and right < len(s):
-                included[s[right]] = included.get(s[right], 0) + 1
-                res = max(res, right - left + 1)
-                right += 1
-            if len(s) <= right:
-                break
-            while right > left and len(included) > k:
-                included[s[left]] -= 1
-                if included[s[left]] == 0:
-                    del included[s[left]]
-                left += 1
+class Trie:
 
-        return res
+    def __init__(self):
+        """
+        Initialize your data structure here.
+        """
+        self.trie = {}
+
+    def insert(self, word: str) -> None:
+        """
+        Inserts a word into the trie.
+        """
+        ptr = self.trie
+        for ch in word:
+            if ch not in ptr:
+                ptr[ch] = {}
+            ptr = ptr[ch]
+        ptr["#"] = "#"
+
+    def search(self, word: str) -> bool:
+        """
+        Returns if the word is in the trie.
+        """
+        ptr = self.trie
+        for ch in word:
+            if ch not in ptr:
+                return False
+            ptr = ptr[ch]
+        return "#" in ptr
+
+    def startsWith(self, prefix: str) -> bool:
+        """
+        Returns if there is any word in the trie that starts with the given prefix.
+        """
+        ptr = self.trie
+        for ch in prefix:
+            if ch not in ptr:
+                return False
+            ptr = ptr[ch]
+        return True
 
 
 if __name__ == '__main__':
