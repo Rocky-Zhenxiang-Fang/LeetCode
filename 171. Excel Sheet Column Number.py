@@ -1,11 +1,8 @@
 class Solution:
-    def titleToNumber(self, s: str) -> int:
-        mapping = {}
-        for i in range(65, 91):
-            mapping[chr(i)] = i - 64
+    def titleToNumber(self, columnTitle: str) -> int:
         res = 0
-        for ch in s:
-            res = res * 26 + mapping[ch]
+        for ch in columnTitle:
+            res = res * 26 + (ord(ch) - ord("A") + 1)
         return res
 
 
