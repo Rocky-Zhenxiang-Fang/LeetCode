@@ -1,51 +1,29 @@
-from typing import List, Tuple
-
-from DS import TreeNode
+# Python3 program to find smallest multiple of
+# a given number made of digits 0 and 9 only
 import collections
+from queue import Queue
+from typing import List, Set
 
 
 class Solution:
-    class Trie:
-        def __init__(self):
-            self.trie = {}
-
-        def insert(self, word: str):
-            ptr = self.trie
-            for ch in word:
-                if ch not in ptr:
-                    ptr[ch] = {}
-                ptr = ptr[ch]
-            ptr["#"] = "#"
-
-    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        trie = self.Trie()
-        for w in words:
-            trie.insert(w)
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
         res = []
-        for row in range(len(board)):
-            for col in range(len(board[0])):
-                if board[row][col] in trie.trie:
-                    self._dfs(board, trie.trie, row, col, [], res)
-
+        self._dfs([], 0, target, candidates, 0, res)
         return res
 
-    def _dfs(self, board, trie, row, col, current, res):
-        moves = [(1, 0), (0, 1), (-1, 0), (0, -1)]
-        if board[row][col] in trie:
-            hold = board[row][col]
-            board[row][col] = "@"
-            trie = trie[hold]
-            current.append(hold)
-            if "#" in trie:
-                res.append("".join(current))
-                trie.pop("#")
-            for m in moves:
-                r, c = row + m[0], col + m[1]
-                if 0 <= r < len(board) and 0 <= c < len(board[0]) and board[r][c] != "@":
-                    self._dfs(board, trie, r, c, current, res)
-            current.pop()
-            board[row][col] = hold
-
+    def _dfs(self, curr: List[int], curr_sum: int, target: int, remain: List[int], ptr: int, res: List[List[int]]):
+        if curr_sum <= target:
+            if curr_sum == target:
+                res.append(curr[:])
+            else:
+                for i in range(ptr, len(remain)):
+                    r = remain[i]
+                    curr.append(r)
+                    self._dfs(curr, curr_sum + r, target, remain, i, res)
+                    curr.pop()
 
 if __name__ == '__main__':
-    pass
+    sol = Solution()
+    a = [2, 3, 6, 7]
+    t = 7
+    print(sol.combinationSum(a, t))

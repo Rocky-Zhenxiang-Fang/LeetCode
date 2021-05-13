@@ -3,23 +3,20 @@ from typing import List
 
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        """
-        Idea:
-        For each recursive call, check if target is smaller then zero and if the target, sub combination have been seen
-        if not, subtract the target by each element of target, and pass the same remaining
-        """
         res = []
-
-        def recur(sub: List[int], remaining: List[int], tar) -> None:
-            if tar >= 0 and len(remaining) >= 0:
-                if tar == 0:
-                    res.append(sub)
-                else:
-                    for i in range(len(remaining)):
-                        recur(sub + [remaining[i]], remaining[i:], tar - remaining[i])
-        recur([], candidates, target)
+        self._dfs([], 0, target, candidates, 0, res)
         return res
 
+    def _dfs(self, curr: List[int], curr_sum: int, target: int, remain: List[int], ptr: int, res: List[List[int]]):
+        if curr_sum <= target:
+            if curr_sum == target:
+                res.append(curr[:])
+            else:
+                for i in range(ptr, len(remain)):
+                    r = remain[i]
+                    curr.append(r)
+                    self._dfs(curr, curr_sum + r, target, remain, i, res)
+                    curr.pop()
 
 if __name__ == '__main__':
     sol = Solution()
