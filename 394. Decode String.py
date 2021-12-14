@@ -3,13 +3,15 @@ class Solution:
         count_stack = []
         element_stack = []
         curr = []
+        dig = 0
         for ch in s: 
             if ch.isdigit():
-                count_stack.append(int(ch))
+                dig = dig * 10 + int(ch)              
             elif ch == "[":
-                if curr:
-                    element_stack.append("".join(curr))
-                    curr = []
+                count_stack.append(dig)
+                dig =0
+                element_stack.append("".join(curr))
+                curr = []
             elif ch == "]":
                 count = count_stack.pop()
                 curr_str = "".join(curr)
@@ -23,6 +25,6 @@ class Solution:
 
 if __name__ == "__main__":
     sol = Solution()
-    input_strings = ["3[a]2[bc]", '3[a2[c]]', '2[abc]3[cd]ef', 'abc3[cd]xyz']
+    input_strings = ["3[a]2[bc]", '3[a2[c]]', '2[abc]3[cd]ef', "100[leetcode]", "3[z]2[2[y]pq4[2[jk]e1[f]]]ef"]
     for string in input_strings:
         print(sol.decodeString(string))
