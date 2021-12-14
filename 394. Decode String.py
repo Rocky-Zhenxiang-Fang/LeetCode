@@ -18,8 +18,6 @@ class Solution:
                 curr = new_curr
             else:
                 curr.append(ch)
-        
-
         return "".join(element_stack + curr)
 
 
