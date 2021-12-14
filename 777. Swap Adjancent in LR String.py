@@ -1,7 +1,7 @@
 from typing import List, Tuple
 
 class Solution:
-    def canTransforms(self, start: str, end: str) -> bool:
+    def canTransform(self, start: str, end: str) -> bool:
         start_data = [(ch, i) for i, ch in enumerate(start) if ch == "R" or ch == "L"]
         end_data = [(ch, i) for i, ch in enumerate(end) if ch == "R" or ch == "L"]
 
