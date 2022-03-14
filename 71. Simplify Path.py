@@ -1,16 +1,35 @@
+from typing import Tuple
+
+
 class Solution:
     def simplifyPath(self, path: str) -> str:
-        paths = path.split("/")
-        res = []
-        for p in paths:
-            if p == "." or p == "":
+        stack = []
+        idx = 0
+        while idx < len(path):
+            directory, idx = self._get_next_directory(path, idx)
+            if directory == "..":
+                if stack:
+                    stack.pop()
+            elif directory == ".":
                 continue
-            elif p == "..":
-                if len(res) > 0:
-                    res.pop()
+            elif len(directory) != 0:
+                stack.append(directory)
+        return "/" + "/".join(stack)
+        
+        
+    def _get_next_directory(self, path: str, start: int) -> Tuple[str, int]:
+        """
+        Given a path and a start, return the next directory and the next start
+        """
+        res = []
+        while start < len(path):
+            if path[start] != "/":
+                res.append(path[start])
             else:
-                res.append(p)
-        return "/" + "/".join(res)
+                if res:
+                    break
+            start += 1
+        return "".join(res).strip(), start
 
 
 if __name__ == '__main__':
