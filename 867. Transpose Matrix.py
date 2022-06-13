@@ -10,9 +10,9 @@ class Solution:
         return new_matrix
 
 
-if __name__ == "__main__":
+def main():
     sol = Solution()
-    test_1 = ([[1,2,3],[4,5,6],[7,8,9]], [[1,4,7],[2,5,8],[3,6,9]])
+    test_1 = ([[1,2,3],[4,5,6],[7,8,9]], [[1,4,7],[2,5,8],[3,6,9]]) #(input, expected result)
     test_2 = ([[1,2,3],[4,5,6]], [[1,4],[2,5],[3,6]])
     tests = (test_1, test_2)
     for idx, (test_case, expected_result) in enumerate(tests):
@@ -22,3 +22,6 @@ if __name__ == "__main__":
             print(f"test {idx + 1} passed")
         else:
             print(f"test {idx + 1} failed")
+
+if __name__ == "__main__":
+    main()
